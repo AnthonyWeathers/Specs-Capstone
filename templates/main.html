@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <!-- <div class="container"> -->
+        <a href="{{ url_for('logout') }}" class="top-left button-style"> Logout </a> <br>
+            <div>
+                <p id="user">
+                    Welcome {{ username }}
+                </p>
+            </div>
+
+        <br>
+
+        <a href="{{ url_for('pc') }}" class="top-right button-style"> PC </a> <br>
+
+        <br>
+
+        <div class="center">
+            <a href="{{ url_for('random_poke') }}" class="button-style"> Search for wild Pokemon </a>
+        </div>
+    <!-- </div> -->
+
+{% endblock %}

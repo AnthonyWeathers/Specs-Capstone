@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <section id="login-register">
+        <h2 id="sign-in">Registering a new account to begin your Pokemon journey</h2>
+    
+        <form id="form" method="POST" action="/register">
+            <div id="form-piece">
+                {{ form.name.label }}: {{ form.name }}
+            </div>
+            <br>
+            <div id="form-piece">
+                {{ form.username.label }}: {{ form.username }} 
+            </div>
+            <br>
+            <div id="form-piece">
+                {{ form.password.label }}: {{ form.password }}
+            </div>
+            {{ form.csrf_token }}
+            <br>
+            <div id="form-piece">
+                <button class="btn btn-primary" type="submit">Register</button>
+            </div>
+        </form>
+    </section>
+
+{% endblock %}

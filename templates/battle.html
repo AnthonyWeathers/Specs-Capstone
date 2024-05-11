@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+    <!-- Add elements to represent the battle menu and image of the enemey pokemon -->
+    <section class="battle-page">
+        <section>
+            <!-- pokemon sprite here -->
+            <img class="pokemon-image" src="{{ pic }}">
+        </section>
+    
+        <p id="encounter">
+            A wild {{ pokemon.name }} has appeared!
+        </p>
+    
+        <div id="battle">
+            <!-- Battle should be top, bag is middle left and pokemon middle right, flee on bottom -->
+            <!-- <p class="options"> Battle </p> 
+            <p class="options middle"> Bag </p>
+            <p class="options middle"> Pokemon </p> -->
+            <a class="button-style capture" href="/pokemon/capture/{{ pokemon.id }}/{{ shiny }}"> Capture </a>
+            <a class="button-style" href="{{ url_for('mainmenu') }}"> Flee </a>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            document.querySelector('.capture').addEventListener('click', function(e){
+                e.preventDefault(); // Prevent the default action of the link
+                let captureUrl = this.getAttribute('href'); // Get the capture URL from the link
+                fetch(captureUrl, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'}})
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        // Update HTML elements
+                        if (data.catch) {
+                            document.querySelector('.pokemon-image').src = data.pokeball_url; // Replace the image with a pokeball image
+                            document.getElementById('battle').innerHTML = data.message + ' <a class="button-style" href="/main">Return</a>'; // Replace the content of the battle div
+                            document.getElementById('encounter').innerHTML = '';
+                        }
+                        else if (!data.catch) {
+                            document.getElementById('encounter').innerHTML = 'Drat, ' + data.pokemon_name +  ' avoided the pokeball!';
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+            });
+        });
+    </script>
+
+{% endblock %}

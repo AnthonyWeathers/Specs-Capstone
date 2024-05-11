@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="pokemon-details">
+    <div class="top-left">
+        <a class="button-style" href="{{ url_for('pc') }}"> Back </a> <br>
+    </div>
+    <section class="pokemon-info">
+        <!-- Button to trigger form display -->
+        <button id="show_form_btn" class="rename-button">Rename</button>
+        
+        <div class="hidden" id="name-form" >
+            <form id="update-name-form">
+                <label for="new-name"> New Name: </label>
+                <input type="text" id="new-name" name="new_name">
+                <a href="/api/update_name/{{ owned_poke.id }}" id="update" class="button-style">Update Name</a>
+            </form>
+        </div>
+        
+        <p id="name-type">
+            Name: <span id="pokemon_name"> {{ owned_poke.name }} </span> 
+            <br><br>
+            Type: {{ pokemon.poketype}}
+        </p>
+        
+        <section class="moves">
+            <div class="move"> 
+                <p> {{ move_1.name}} </p>
+                <p> PP: {{ move_1.pp}} </p>
+                <p> Power: {{ move_1.power}} </p>
+                <p> Accuracy: {{ move_1.accuracy}} </p>
+            </div>
+            <div class="move"> 
+                <p> {{ move_2.name}} </p>
+                <p> PP: {{ move_2.pp}} </p>
+                <p> Power: {{ move_2.power}} </p>
+                <p> Accuracy: {{ move_2.accuracy}} </p>
+            </div>
+            <div class="move"> 
+                <p> {{ move_3.name}} </p>
+                <p> PP: {{ move_3.pp}} </p>
+                <p> Power: {{ move_3.power}} </p>
+                <p> Accuracy: {{ move_3.accuracy}} </p>
+            </div>
+            <div class="move"> 
+                <p> {{ move_4.name}} </p>
+                <p> PP: {{ move_4.pp}} </p>
+                <p> Power: {{ move_4.power}} </p>
+                <p> Accuracy: {{ move_4.accuracy}} </p>
+            </div>
+        </section>
+    </section>
+    
+    <section>
+        <!-- pokemon sprite here -->
+        <img class="pokemon-image details" src="{{ owned_poke.sprite }}">
+        
+        <a href="/api/delete/{{ owned_poke.id }}" class="button-style">
+            Release
+        </a>
+    </section>
+</div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const showFormButton = document.getElementById('show_form_btn');
+            const nameForm = document.getElementById('name-form');
+            const pokemonNameElement = document.getElementById('pokemon_name');
+        
+            showFormButton.addEventListener('click', () => {
+                nameForm.classList.toggle('hidden'); // Show/Hide the form when button clicked
+            });
+        
+            document.getElementById('update').addEventListener('click', event => {
+                event.preventDefault();
+                // enters the code
+                const newName = document.getElementById('new-name').value;
+                let renameUrl = event.target.getAttribute('href'); // Get the capture URL from the link
+                console.log('Testing newName and renameUrl: ');
+                console.log(newName, renameUrl);
+                fetch(renameUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ new_name: newName }),
+                })
+                .then(res => {
+                    return res.json()
+                })
+                .then(data => {
+                    // Handle response from server
+                    if (data.success) {
+                        // alert(data.message)
+                        pokemonNameElement.textContent = data.new_name; // Update displayed name
+                    } else {
+                        alert(data.message); // Show error message
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+        </script>
+
+{% endblock %}

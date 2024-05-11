@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <section id="login-register">
+
+        <h2 id="sign-in">Please Sign In To Resume Your Pokemon Journey</h2>
+    
+        <a href="{{ url_for('register') }}"> New? Register here </a>
+    
+        <form id="form" method="POST" action="/login">
+            <div id="form-piece">
+                {{ form.username.label }}: {{ form.username }} 
+            </div>
+            <br>
+            <div id="form-piece">
+                {{ form.password.label }}: {{ form.password }}
+            </div>
+            {{ form.csrf_token }}
+            <br>
+            <div id="form-piece">
+                <button class="btn btn-primary" type="submit">Sign In</button>
+            </div>
+        </form>
+    </section>
+
+{% endblock %}

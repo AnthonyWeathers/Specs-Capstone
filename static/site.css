@@ -1,0 +1,193 @@
+/* .container {
+} */
+body {
+    background-color: rgb(192, 192, 192);
+}
+
+/* login form */
+#login-register {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px;
+}
+
+#form {
+    padding: 10px;
+    position: relative;
+    top: 80px;
+}
+
+#form-piece {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 300px;
+
+}
+/* end of login form css */
+
+.battle-page {
+    padding: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#battle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 150px;
+    justify-content: space-evenly;
+
+    font-size: larger;
+}
+
+#encounter {
+    font-size: larger;
+}
+
+.pokemon-image {
+    width: 250px;
+    height: 250px;
+}
+
+.pokemon-container{
+    height: 200px;
+    width: 200px;
+}
+
+.container {
+    padding: 10px;
+    height: 100%;
+    border: solid rgb(7, 7, 7) 1px;
+    background-color: rgb(235, 235, 209);
+}
+
+.block-container {
+    position: relative;
+    left: 8%;
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    height: 100%;
+    text-align: center; /* Align center for the "Search for wild Pokemon" link */
+    padding: 10px;
+    border: solid ghostwhite 1px;
+    background-color: rgb(155, 214, 193);
+}
+/* main page (reuses top-left)*/
+
+.top-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+#user {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    margin-top: 50px; /*Adjust as needed */
+    padding: 10px;
+}
+
+.center {
+    position: relative;
+    top: 40%;
+}
+/* end of main page */
+
+/* poke-details */
+.pokemon-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Aligns items along the main axis */
+    align-items: flex-start; /* Aligns items along the cross axis */
+}
+
+.pokemon-image {
+    float: right;
+    margin-left: 20px; /* Adjust as needed */
+}
+
+.pokemon-info {
+    flex-grow: 1;
+    max-width: 60%; /* Limit width of info section */
+    margin-top: 80px;
+    padding: 10px;
+}
+
+.moves {
+    /* Add styles for moves section if needed */
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: space-between; */
+}
+
+.move {
+    width: 50%; /* Each move takes up half of the container */
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+    padding: 10px; /* Adjust as needed */
+}
+
+.top-left {
+    padding: 10px; /* Adjust padding as needed */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.rename-button {
+    margin-top: 10px; /* Adjust margin as needed */
+}
+
+#name-type {
+    font-size: large;
+    margin: 20px;
+}
+/* end of poke details */
+
+/* PC */
+#pc {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.hidden-bullets {
+    list-style-type: none;
+}
+
+.pc-pokemon-image {
+    width: 200px;
+    height: 200px;
+}
+
+.top {
+    padding: 10px; /* Adjust padding as needed */
+    position: absolute;
+    top: 0;
+    left: 45%;
+    width: 100px;
+}
+/* end of PC */
+
+.hidden {
+    display: none;
+}
+
+.button-style {
+    display: inline-block;
+    padding: 10px 20px;
+    /* background-color: #ffffff; */
+    color: rgb(0, 0, 0);
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    /* border: solid black 2px; */
+    border-radius: 5px;
+    cursor: pointer;
+}

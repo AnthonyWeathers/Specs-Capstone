@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <a href="{{ url_for('mainmenu') }}" class="top button-style"> Exit PC </a>
+    <br>
+    <div>
+        <ul id="pc">
+            {% for pokemon in pokemons %}
+            <li class="hidden-bullets">
+                <div class="pokemon-container">
+                    <img class="pc-pokemon-image" src="{{ pokemon.sprite }}">
+                    <div class="menu hidden">
+                        <a class="button-style" href="/pc/{{ pokemon.id }}"> Details </a>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script>
+        // Function to toggle visibility of menu
+        function toggleMenu(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('hidden');
+        }
+
+        // Add event listeners to each pokemon container
+        const pokemonContainers = document.querySelectorAll('.pokemon-container');
+        pokemonContainers.forEach(container => {
+            container.addEventListener('click', toggleMenu);
+        });
+
+        // Close menu if clicked outside
+        document.addEventListener('click', function(event) {
+            const menus = document.querySelectorAll('.menu');
+            menus.forEach(menu => {
+                // if (!menu.contains(event.target)) {
+                if (!menu.parentNode.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+{% endblock %}
