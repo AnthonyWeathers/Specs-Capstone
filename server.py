@@ -86,9 +86,15 @@ def logout():
 
 @app.route("/pc")
 def pc():
-     user = session['user_id']
-     pokemons = crud.get_owned_pokemon_by_user_id(user)
-     return render_template("pc.html", pokemons=pokemons)
+    user = session['user_id']
+    # pokemons = crud.get_owned_pokemon_by_user_id(user)
+    # return render_template("pc.html", pokemons=pokemons)
+    pokemon_type = request.args.get('type')  # Get the type from query parameters
+    if pokemon_type:
+        pokemons = crud.get_owned_pokemon_by_typename(typename=pokemon_type)  # Adjust the filter based on your database schema
+    else:
+        pokemons = crud.get_owned_pokemon() # Fetch all Pokémon if no type is specified
+    return render_template('pc.html', pokemons=pokemons)
 
 @app.route("/pokemon/random")
 def random_poke():
@@ -157,15 +163,17 @@ def capture(poke_id, shiny):
             owned_poke_moves.append(crud.get_move_by_id(move.move_id))
 
         owned_poke = crud.create_own_poke(
-                poke_id,
-                user_id,
-                sprite,
-                owned_poke_moves[0].id,
-                owned_poke_moves[1].id,
-                owned_poke_moves[2].id,
-                owned_poke_moves[3].id,
-                pokemon.name
-            )
+            poke_id,
+            user_id,
+            sprite,
+            owned_poke_moves[0].id,
+            owned_poke_moves[1].id,
+            owned_poke_moves[2].id,
+            owned_poke_moves[3].id,
+            pokemon.name,
+            crud.get_poke_type_by_id(pokemon.poketype1).poketype,
+            crud.get_poke_type_by_id(pokemon.poketype2).poketype if pokemon.poketype2 else None
+        )
         db.session.add(owned_poke)
         db.session.commit()
 
@@ -194,8 +202,12 @@ def details(poke_id):
     move_3 = crud.get_move_by_id(owned_poke.move_3_id)
     move_4 = crud.get_move_by_id(owned_poke.move_4_id)
 
+    poketype1 = crud.get_poke_type_by_id(pokemon.poketype1).poketype
+    poketype2 = crud.get_poke_type_by_id(pokemon.poketype2).poketype if pokemon.poketype2 else None
+
     return render_template("poke_details.html", owned_poke=owned_poke, pokemon=pokemon,
-                           move_1=move_1, move_2=move_2, move_3=move_3, move_4=move_4)
+                           move_1=move_1, move_2=move_2, move_3=move_3, move_4=move_4, 
+                           poketype1=poketype1, poketype2=poketype2)
 
 @app.route("/api/delete/<poke_id>")
 def delete_poke(poke_id):
@@ -233,6 +245,48 @@ def update_name(poke_id):
             "message": "Renaming error",
             "new_name": owned_poke.name
         })
+    
+@app.route("/guess")
+def guess():
+
+    """ Grabs a random pokemon to display for guessing game, and grey its out so only outline is shown"""
+
+    total_pokemon = len(crud.get_pokemon())
+
+    RanNum = random.randrange(1, total_pokemon)
+    pokemon = crud.get_pokemon_by_id(RanNum)
+    guesses = 3
+
+    req = requests.get(f"https://pokeapi.co/api/v2/pokemon/{RanNum}").json()['forms'][0]['url']
+
+    # grabs normal sprite of pokemon
+    pic = requests.get(req).json()['sprites']['front_default']
+
+    """ pokemon represents the random pokemon, and pic will be a sprite of it """
+    return render_template('guess.html', pokemon=pokemon, pic=pic, guesses=guesses)
+
+@app.route("/api/guess/<name>", methods=["POST"])
+def make_guess(name):
+
+    """ Checks guess against name to see if user guessed the pokemon right """
+
+    guess = request.json.get("guess").lower()
+    guesses = int(request.json.get("guesses"))
+    if guesses > 1:
+        if guess == name:
+            return jsonify ({
+                "correct": True,
+                "pokemon_name": name.capitalize()
+            })
+        else:
+            return jsonify ({
+                "correct": False,
+                'guesses': guesses - 1
+            })
+    else :
+        return jsonify ({
+                "pokemon_name": name.capitalize()
+            })
 
         
 

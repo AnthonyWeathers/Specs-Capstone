@@ -92,3 +92,17 @@ If a user wishes to try this app out on their own device, then there is some req
     * After setup, enter "python server.py", the app will be live, and you'd open the url you see in the terminal, if it works then you'll see the login page, shown earlier
     * Now you can use the app
     * Note: If you close visual studio code and relaunch it, you'll need to redo "source config.sh" before "python server.py", because source config.sh establishes the connection to your database
+
+## Additional Features Added
+* Who's That Pokemon:
+![Who's That Pokemon Game](/static/guessing-game.png)
+    * A random pokemon outline will be shown and a guess can be made
+    * 3 guess are given to get the pokemon correct (letters can be either upper or lowercase, as long as spelling is correct)
+![Correct](/static/guessing-game-success.png)
+    * If user guesses correctly then the pokemon is revealed and shows the text
+    * If user guesses incorrectly, then pokemon and its name is revealed
+    * Can play again with a new random pokemon selected
+
+* Filter for PC:
+![Filter](/static/filter.png)
+    * Can filter the caught pokemon via their typing (for example, only fire type pokemon user has caught would be displayed if user selects Fire from the filter list)

@@ -1,6 +1,7 @@
 """CRUD operations."""
 
-from model import db, User, Move, PokeMove, OwnPoke, Poke, connect_to_db
+from model import db, User, Move, PokeMove, OwnPoke, Poke, PokeType, connect_to_db
+from sqlalchemy import or_
 
 def create_user(username, password):
     """Create and return a new user."""
@@ -45,10 +46,10 @@ def get_move_by_name(name):
 
 
 
-def create_pokemon(name, poketype):
+def create_pokemon(name, poketype1, poketype2):
     """Create and return a new pokemon from database."""
 
-    pokemon = Poke(name=name, poketype=poketype)
+    pokemon = Poke(name=name, poketype1=poketype1, poketype2=poketype2)
 
     return pokemon
 
@@ -59,6 +60,11 @@ def get_pokemon():
 def get_pokemon_by_id(id):
     """Return a pokemon details."""
     return Poke.query.get(id)
+
+def get_pokemon_by_typeid(typeid):
+    """ Return all pokemon that has the inputted type """
+    return Poke.query.filter(
+        or_(Poke.poketype1 == typeid, Poke.poketype2 == typeid)).all()
 
 
 
@@ -79,11 +85,12 @@ def get_pokemon_move_by_poke_id(poke_id):
 
 
 
-def create_own_poke(pokemon_id, user_id, sprite, move_1_id, move_2_id, move_3_id, move_4_id, name):
+def create_own_poke(pokemon_id, user_id, sprite, move_1_id, move_2_id, move_3_id, move_4_id, name, poketype1, poketype2):
     """Create and return a new caught pokemon."""
 
     owned_pokemon = OwnPoke(pokemon_id=pokemon_id, user_id=user_id, sprite=sprite, move_1_id=move_1_id, 
-                  move_2_id=move_2_id, move_3_id=move_3_id, move_4_id=move_4_id, name=name)
+                  move_2_id=move_2_id, move_3_id=move_3_id, move_4_id=move_4_id, name=name,
+                  poketype1=poketype1, poketype2=poketype2)
 
     return owned_pokemon
 
@@ -99,7 +106,26 @@ def get_owned_pokemon_by_user_id(user_id):
     """Return a caught pokemon's details."""
     return OwnPoke.query.filter_by(user_id=user_id).order_by(OwnPoke.id).all()
 
+def get_owned_pokemon_by_typename(typename):
+    """ Return all pokemon that has the inputted type """
+    return OwnPoke.query.filter(
+        or_(OwnPoke.poketype1 == typename, OwnPoke.poketype2 == typename)).all()
 
+# PokeType crud functions
+def create_poke_type(poketype):
+    """Create and return a new pokemon to move connection."""
+
+    poke_type = PokeType(poketype=poketype)
+
+    return poke_type
+
+def get_poke_type_by_type(type):
+    """Return a type's name and id."""
+    return PokeType.query.filter_by(poketype=type).first()
+
+def get_poke_type_by_id(type_id):
+    """Return a type's name and id."""
+    return PokeType.query.filter_by(id=type_id).first()
 
 if __name__ == '__main__':
     from server import app

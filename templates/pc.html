@@ -3,6 +3,38 @@
 {% block body %}
     <a href="{{ url_for('mainmenu') }}" class="top button-style"> Exit PC </a>
     <br>
+    <br>
+
+    <!-- Filter Dropdown -->
+    <div>
+        <label for="type-filter">Filter by Type:</label>
+        <select id="type-filter">
+            <option value=""></option>
+            <option value="all">All</option>
+            <option value="fire">Fire</option>
+            <option value="water">Water</option>
+            <option value="grass">Grass</option>
+            <option value="normal">Normal</option>
+            <option value="flying">Flying</option>
+            <option value="fighting">Fighting</option>
+            <option value="poison">Poison</option>
+            <option value="ground">Ground</option>
+            <option value="rock">Rock</option>
+            <option value="bug">Bug</option>
+            <option value="ghost">Ghost</option>
+            <option value="steel">Steel</option>
+            <option value="electric">Electric</option>
+            <option value="psychic">Psychic</option>
+            <option value="ice">Ice</option>
+            <option value="dragon">Dragon</option>
+            <option value="dark">Dark</option>
+            <option value="fairy">Fairy</option>
+            <option value="stellar">Stellar</option>
+            <!-- Add other types as needed -->
+        </select>
+    </div>
+    <br>
+
     <div>
         <ul id="pc">
             {% for pokemon in pokemons %}
@@ -40,6 +72,18 @@
                     menu.classList.add('hidden');
                 }
             });
+        });
+
+        // Filter Pokémon based on type
+        document.getElementById('type-filter').addEventListener('change', function() {
+            const selectedType = this.value;
+            const url = new URL(window.location.href);
+            if (selectedType != 'all') {
+                url.searchParams.set('type', selectedType);
+            } else {
+                url.searchParams.delete('type');
+            }
+            window.location.href = url.toString();
         });
     </script>
 {% endblock %}

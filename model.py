@@ -29,7 +29,8 @@ class Poke(db.Model):
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     name = db.Column(db.String(255), nullable = False)
-    poketype = db.Column(db.String(255), nullable = False)
+    poketype1 = db.Column(db.Integer, db.ForeignKey("types.id"), nullable = False)
+    poketype2 = db.Column(db.Integer, db.ForeignKey("types.id"), nullable = True)
 
 class PokeMove(db.Model):
 
@@ -52,6 +53,14 @@ class OwnPoke(db.Model):
     move_3_id = db.Column(db.Integer, db.ForeignKey("moves.id"), nullable = False)
     move_4_id = db.Column(db.Integer, db.ForeignKey("moves.id"), nullable = False)
     name = db.Column(db.String(255))
+    poketype1 = db.Column(db.String(255))
+    poketype2 = db.Column(db.String(255), nullable = True)
+
+class PokeType(db.Model):
+    __tablename__ = "types"
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    poketype = db.Column(db.String(255), nullable = False)
 
 class Region(db.Model):
 

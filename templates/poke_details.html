@@ -4,11 +4,13 @@
 
 <div class="pokemon-details">
     <div class="top-left">
-        <a class="button-style" href="{{ url_for('pc') }}"> Back </a> <br>
+        <a class="button-style" href="{{ url_for('pc') }}"> Back </a>
     </div>
     <section class="pokemon-info">
         <!-- Button to trigger form display -->
-        <button id="show_form_btn" class="rename-button">Rename</button>
+        <div id="rename-btn">
+            <a id="show_form_btn" class="button-style">Rename</a>
+        </div>
         
         <div class="hidden" id="name-form" >
             <form id="update-name-form">
@@ -20,8 +22,13 @@
         
         <p id="name-type">
             Name: <span id="pokemon_name"> {{ owned_poke.name }} </span> 
-            <br><br>
-            Type: {{ pokemon.poketype}}
+            <!-- <br><br> -->
+            <div class="poke-type">
+                Type: <div class="type">{{ poketype1.capitalize()}} </div>
+                {% if poketype2 %}
+                    <div class="type">{{ poketype2.capitalize() }}</div>
+                {% endif %}
+            </div>
         </p>
         
         <section class="moves">
@@ -68,9 +75,15 @@
             const showFormButton = document.getElementById('show_form_btn');
             const nameForm = document.getElementById('name-form');
             const pokemonNameElement = document.getElementById('pokemon_name');
+            const renameBtn = document.getElementById('rename-btn');
         
             showFormButton.addEventListener('click', () => {
                 nameForm.classList.toggle('hidden'); // Show/Hide the form when button clicked
+                if (renameBtn.classList.contains('hidden')) {
+                    renameBtn.classList.toggle('hidden');
+                } else {
+                    renameBtn.classList.add('hidden');
+                }
             });
         
             document.getElementById('update').addEventListener('click', event => {
@@ -98,6 +111,8 @@
                     } else {
                         alert(data.message); // Show error message
                     }
+                    renameBtn.classList.toggle('hidden');
+                    nameForm.classList.toggle('hidden');
                 })
                 .catch(error => {
                     console.error('Error:', error);

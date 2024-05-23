@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <a href="{{ url_for('mainmenu') }}" class="top-left button-style"> Quit Game </a>
+    <!-- Add elements to represent the battle menu and image of the enemey pokemon -->
+    <section class="battle-page">
+        <section>
+            <!-- pokemon sprite here -->
+            <img class="pokemon-image gray" src="{{ pic }}">
+        </section>
+    
+        <p id="encounter">
+            Guess that pokemon!!
+            <div class="guess-attempts">
+                <p class="text">You have </p> 
+                <p id="num-guesses"> {{guesses}} </p> 
+                <p class="text"> guesses left</p>
+            </div>
+        </p>
+
+        <!-- <div class="hidden" id="name-form" > -->
+        <form id="guess-form">
+            <label for="pokemon-guess"> New Name: </label>
+            <input type="text" id="pokemon-guess" name="guess">
+            <a href="/api/guess/{{ pokemon.name }}" id="guess-submit" class="button-style">Guess</a>
+        </form>
+
+        <div class="hidden" id="play-again">
+            <a href="/guess" id="play" class="button-style">Play Again?</a>
+        </div>
+        <!-- </div> -->
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            document.getElementById('guess-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+            });
+            document.getElementById('guess-submit').addEventListener('click', function(e){
+                e.preventDefault(); // Prevent the default action of the link
+
+                const guess = document.getElementById('pokemon-guess').value;
+                const guesses = document.getElementById('num-guesses').innerHTML;
+                let guessUrl = event.target.getAttribute('href'); // Get the guess POST URL from the link
+                fetch(guessUrl, {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        guess: guess,
+                        guesses: guesses
+                    }),
+                })
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    // Handle response from server
+                    if (data.correct) {
+                        // change image line to change css of sprite to non-grey, and modifies text if user is correct
+                        document.querySelector('.pokemon-image').style.filter = 'none';
+                        document.getElementById('encounter').innerHTML = "That's right! It's... " + data.pokemon_name + '!!';
+                        document.getElementById("guess-form").classList.add('hidden');
+                        document.getElementById('play-again').classList.toggle('hidden');
+                        document.getElementById('num-guesses').innerHTML = '';
+                        const texts = document.querySelectorAll('p.text');
+
+                        texts.forEach(text => {
+                            text.textContent = '';
+                        });
+                    }
+                    // Updates text to inform user their guess was wrong and the number of attempts they have left
+                    else if (!data.correct && guesses > 1) {
+                        document.getElementById('encounter').innerHTML = "Sorry, that's incorrect. Try again. ";
+                        document.getElementById('num-guesses').innerHTML = data.guesses;
+                    }
+                    else {
+                        // If user runs out of attempts, then they are shown the pokemon and its name
+                        document.querySelector('.pokemon-image').style.filter = 'none';
+                        document.getElementById('encounter').innerHTML = "Sorry, out of attempts... It's " + data.pokemon_name + '.';
+                        document.getElementById("guess-form").classList.add('hidden');
+                        document.getElementById('play-again').classList.toggle('hidden');
+                        document.getElementById('num-guesses').innerHTML = '';
+                        const texts = document.querySelectorAll('p.text');
+
+                        texts.forEach(text => {
+                            text.textContent = '';
+                        });
+                    }
+                })
+                .catch(function(error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

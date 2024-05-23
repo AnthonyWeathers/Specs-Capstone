@@ -1,8 +1,60 @@
-/* .container {
-} */
+/* Apply box-sizing universally */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Set the height for HTML and body to ensure full viewport coverage */
+html, body {
+    height: 100%;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    /* background-color: rgb(192, 192, 192); */
+
+    display: flex;
+    flex-direction: column;
+    /* align-items: stretch; /*Ensure children take full width */
+  }
+
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     background-color: rgb(192, 192, 192);
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Ensure children take full width */
+    flex-grow: 1; /* Enables container object to fill in space so its height matches the body even when it expands */
+    padding: 10px;
+    border: solid rgb(7, 7, 7) 1px;
+    background-color: rgb(235, 235, 209);
+}
+
+.block-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Ensure children take full width */
+    position: relative;
+    left: 8%;
+    width: 85%;
+    height: 100%;
+    text-align: center; /* Align center for the "Search for wild Pokemon" link */
+    padding: 10px;
+    border: solid ghostwhite 1px;
+    background-color: rgb(155, 214, 193);
+}
+
+/* Clearfix hack for floating elements */
+/* .container::after,
+.block-container::after {
+  content: "";
+  display: table;
+  clear: both;
+} */
 
 /* login form */
 #login-register {
@@ -55,28 +107,8 @@ body {
 }
 
 .pokemon-container{
-    height: 200px;
+    height: 210px;
     width: 200px;
-}
-
-.container {
-    padding: 10px;
-    height: 100%;
-    border: solid rgb(7, 7, 7) 1px;
-    background-color: rgb(235, 235, 209);
-}
-
-.block-container {
-    position: relative;
-    left: 8%;
-    display: flex;
-    flex-direction: column;
-    width: 85%;
-    height: 100%;
-    text-align: center; /* Align center for the "Search for wild Pokemon" link */
-    padding: 10px;
-    border: solid ghostwhite 1px;
-    background-color: rgb(155, 214, 193);
 }
 /* main page (reuses top-left)*/
 
@@ -104,20 +136,26 @@ body {
 .pokemon-details {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Aligns items along the main axis */
-    align-items: flex-start; /* Aligns items along the cross axis */
+    /*justify-content: space-between; /* Aligns items along the main axis */
+   /* align-items: flex-start; /* Aligns items along the cross axis */
 }
 
 .pokemon-image {
     float: right;
     margin-left: 20px; /* Adjust as needed */
+    
+}
+
+.details {
+    position: relative;
+    top: 150px;
 }
 
 .pokemon-info {
     flex-grow: 1;
     max-width: 60%; /* Limit width of info section */
     margin-top: 80px;
-    padding: 10px;
+    padding: 5px;
 }
 
 .moves {
@@ -130,7 +168,7 @@ body {
 .move {
     width: 50%; /* Each move takes up half of the container */
     box-sizing: border-box; /* Ensure padding and border are included in the width */
-    padding: 10px; /* Adjust as needed */
+    padding: 2px; /* Adjust as needed */
 }
 
 .top-left {
@@ -140,13 +178,43 @@ body {
     left: 0;
 }
 
-.rename-button {
-    margin-top: 10px; /* Adjust margin as needed */
-}
-
 #name-type {
+    display: flex;
+    flex-direction: column;
     font-size: large;
     margin: 20px;
+    height: 10%;
+}
+
+.poke-type {
+    position: relative;
+    left: 35%;
+    display: flex;
+    justify-content: space-evenly;
+    width: 35%;
+}
+
+.type {
+    position: relative;
+    bottom: 7px;
+    background-color:rgb(212, 180, 180);
+    font-size: large;
+    border: solid black 2px;
+    border-radius: 20px;
+    padding: 5px;
+}
+
+.rename-button {
+    display: inline-block;
+    padding: 10px 20px;
+    /* background-color: #ffffff; */
+    color: rgb(0, 0, 0);
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    /* border: solid black 2px; */
+    border-radius: 5px;
+    cursor: pointer;
 }
 /* end of poke details */
 
@@ -182,12 +250,31 @@ body {
 .button-style {
     display: inline-block;
     padding: 10px 20px;
-    /* background-color: #ffffff; */
+    /* background-color: #d3d3d3; */
     color: rgb(0, 0, 0);
     text-align: center;
     text-decoration: none;
     font-size: 18px;
-    /* border: solid black 2px; */
-    border-radius: 5px;
+    /* border: solid black 1px; /* Can add a background color to the links if desired */
+    /* border-radius: 20px; */
     cursor: pointer;
+}
+
+.menu {
+    position: relative;
+    bottom: 20px;
+}
+
+/* Guess additional styling */
+.gray {
+    filter: brightness(0);
+    transition: filter 0.5s ease;
+}
+
+.guess-attempts {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+
+    width: 25%;
 }

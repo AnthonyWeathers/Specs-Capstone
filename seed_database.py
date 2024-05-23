@@ -35,6 +35,20 @@ def seed_moves():
     
     model.db.session.commit()
 
+def seed_poke_types():
+    response = requests.get('https://pokeapi.co/api/v2/type/?limit=19')
+    data = response.json()
+
+    for type_data in data['results']:
+        type_name = type_data['name']
+        
+        # Create PokeType instance
+        poke_type = crud.create_poke_type(poketype=type_name)
+        
+        model.db.session.add(poke_type)
+    
+    model.db.session.commit()
+
 def seed_pokemon():
     response = requests.get('https://pokeapi.co/api/v2/pokemon/?limit=1025') # grabs all pokemon
     data = response.json()
@@ -42,11 +56,33 @@ def seed_pokemon():
     # Iterate over each Pokemon and populate the database
     for pokemon in data['results']:
         pokemon_data = requests.get(pokemon['url']).json()
+
+        # Get or create PokeType instances for each type
+        poke_types = []
+        for type_data in pokemon_data['types']:
+            poke_type_name = type_data['type']['name']
+            poke_type = crud.get_poke_type_by_type(poke_type_name)
+            if not poke_type:
+                poke_type = crud.create_poke_type(poketype=poke_type_name)
+            poke_types.append(poke_type.id)
+            
+        # Create Pokemon instance
         pokemon_instance = crud.create_pokemon(
             name=pokemon_data['name'],
-            poketype=pokemon_data['types'][0]['type']['name']
+            # poketype will store the id of the foreign key from poketypes
+            # so create a crud get by id for poketype
+            poketype1=poke_types[0],
+            poketype2=poke_types[1] if len(poke_types) > 1 else None
         )
         model.db.session.add(pokemon_instance)
+
+        # pokemon_instance = crud.create_pokemon(
+        #     name=pokemon_data['name'],
+        #     poketype=pokemon_data['types'][0]['type']['name'],
+        #     # poketype1=pokemon_data['types'][0]['type']['name'],
+        #     # poketype2=pokemon_data['types'][1]['type']['name']
+        # )
+        # model.db.session.add(pokemon_instance)
     
     model.db.session.commit()
 
@@ -74,5 +110,6 @@ with server.app.app_context():
     model.db.create_all()
 
     seed_moves()
+    seed_poke_types()
     seed_pokemon()
     seed_pokemon_moves()
