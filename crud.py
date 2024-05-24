@@ -106,9 +106,9 @@ def get_owned_pokemon_by_user_id(user_id):
     """Return a caught pokemon's details."""
     return OwnPoke.query.filter_by(user_id=user_id).order_by(OwnPoke.id).all()
 
-def get_owned_pokemon_by_typename(typename):
-    """ Return all pokemon that has the inputted type """
-    return OwnPoke.query.filter(
+def get_owned_pokemon_by_typename(user_id, typename):
+    """ Return all pokemon that has the inputted type and is owned by the logged user """
+    return OwnPoke.query.filter(OwnPoke.user_id == user_id,
         or_(OwnPoke.poketype1 == typename, OwnPoke.poketype2 == typename)).all()
 
 # PokeType crud functions

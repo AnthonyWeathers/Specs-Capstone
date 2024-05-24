@@ -86,14 +86,14 @@ def logout():
 
 @app.route("/pc")
 def pc():
-    user = session['user_id']
+    user_id = session['user_id']
     # pokemons = crud.get_owned_pokemon_by_user_id(user)
     # return render_template("pc.html", pokemons=pokemons)
     pokemon_type = request.args.get('type')  # Get the type from query parameters
     if pokemon_type:
-        pokemons = crud.get_owned_pokemon_by_typename(typename=pokemon_type)  # Adjust the filter based on your database schema
+        pokemons = crud.get_owned_pokemon_by_typename(user_id=user_id, typename=pokemon_type)  # gets all owned pokemon by user and if their type matches the filter type
     else:
-        pokemons = crud.get_owned_pokemon() # Fetch all Pokémon if no type is specified
+        pokemons = crud.get_owned_pokemon_by_user_id(user_id) # Fetch all Pokémon if no type is specified
     return render_template('pc.html', pokemons=pokemons)
 
 @app.route("/pokemon/random")
